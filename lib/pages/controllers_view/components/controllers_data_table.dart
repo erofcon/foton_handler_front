@@ -1,22 +1,21 @@
-import 'dart:math';
-
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:foton_handler_front/pages/controllers_view/controllers/data_table_controller.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/constants.dart';
 import '../../one_controller_view/one_controller_view.dart';
 
-class ControllersDataTable extends StatelessWidget {
+class ControllersDataTable extends GetView<DataTableController> {
   const ControllersDataTable({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return PaginatedDataTable2(
-      source: ControllerDataSource(),
+      source: ControllerDataSource(controller.data),
       columnSpacing: 12,
       horizontalMargin: 12,
-      rowsPerPage: 20,
+      wrapInCard: false,
       columns: [
         const DataColumn2(label: Text("№")),
         const DataColumn2(label: Text("IP Address")),
@@ -30,13 +29,9 @@ class ControllersDataTable extends StatelessWidget {
 }
 
 class ControllerDataSource extends DataTableSource {
-  final List<Map<String, dynamic>> _data = List.generate(
-      200,
-      (index) => {
-            '№': index,
-            "IP Address": "192.168.1.251",
-            "charge level": Random().nextInt(1000),
-          });
+  ControllerDataSource(this._data);
+
+  final List<Map<String, dynamic>> _data;
 
   @override
   DataRow? getRow(int index) {

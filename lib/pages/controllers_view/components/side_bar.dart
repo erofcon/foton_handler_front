@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../utils/constants.dart';
+import '../../../routes/routes.dart';
+import '../../../utils/constants.dart';
 
 class SideBar extends StatelessWidget {
   const SideBar({Key? key}) : super(key: key);
@@ -11,13 +12,9 @@ class SideBar extends StatelessWidget {
     return Column(
       children: <Widget>[
         DrawerList(
-            title: "controllers".tr,
-            icon: Icons.indeterminate_check_box_rounded,
-            press: () {}),
-        DrawerList(
             title: "admin_panel".tr,
             icon: Icons.admin_panel_settings,
-            press: () {})
+            press: () => Get.toNamed(RoutesClass.adminPanel))
       ],
     );
   }
@@ -36,7 +33,8 @@ class DrawerList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(UiConstants.defaultPadding*0.3)),
+          borderRadius:
+              BorderRadius.circular(UiConstants.defaultPadding * 0.3)),
       style: ListTileStyle.drawer,
       onTap: press,
       horizontalTitleGap: 1.0,

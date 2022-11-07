@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:foton_handler_front/pages/main_view/controller_panel.dart';
 import 'package:foton_handler_front/utils/constants.dart';
 import 'package:get/get.dart';
 
-import '../../shared_components/CustomAppBar.dart';
-import '../../shared_components/side_bar.dart';
+import '../../shared_components/customAppBar.dart';
 import '../../utils/responsive.dart';
+import 'components/controller_search.dart';
 import 'components/controllers_data_table.dart';
 import 'components/controllers_status_bar.dart';
 import 'components/legend.dart';
+import 'components/side_bar.dart';
 
 class ControllersView extends StatelessWidget {
   const ControllersView({Key? key}) : super(key: key);
