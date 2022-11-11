@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 
 class IconButtonHoverWithEffect extends StatefulWidget {
-  const IconButtonHoverWithEffect(
-      {Key? key,
-      required this.icon,
-      required this.size,
-      required this.backgroundColor,
-      required this.hoverColor})
-      : super(key: key);
+  const IconButtonHoverWithEffect({
+    Key? key,
+    required this.icon,
+    required this.size,
+    required this.backgroundColor,
+    required this.hoverColor,
+    required this.onTap,
+    this.iconColor = Colors.white,
+  }) : super(key: key);
   final IconData icon;
   final double size;
   final Color backgroundColor;
   final Color hoverColor;
+  final Color iconColor;
+  final Function() onTap;
 
   @override
   State<IconButtonHoverWithEffect> createState() =>
@@ -24,7 +28,8 @@ class _IconButtonHoverWithEffectState extends State<IconButtonHoverWithEffect> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      borderRadius: const BorderRadius.all(Radius.circular(30)),
+      onTap: widget.onTap,
       onHover: (val) {
         setState(() {
           isHover = val;
@@ -39,7 +44,7 @@ class _IconButtonHoverWithEffectState extends State<IconButtonHoverWithEffect> {
         height: widget.size * 1.2,
         child: Icon(
           widget.icon,
-          color: Colors.white,
+          color: widget.iconColor,
           size: 20,
         ),
       ),

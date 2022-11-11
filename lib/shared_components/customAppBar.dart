@@ -48,12 +48,14 @@ class ActionButtons extends StatelessWidget {
           padding: const EdgeInsets.only(right: UiConstants.defaultPadding*2),
           child: Row(children: <Widget>[
             IconButtonHoverWithEffect(
+              onTap: (){},
               icon: Icons.settings,
               size: 25,
               backgroundColor: Theme.of(context).appBarTheme.backgroundColor!,
               hoverColor: Theme.of(context).appBarTheme.shadowColor!,
             ),
             IconButtonHoverWithEffect(
+              onTap: (){},
               icon: Icons.dark_mode_sharp,
               size: 25,
               backgroundColor: Theme.of(context).appBarTheme.backgroundColor!,

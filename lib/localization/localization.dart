@@ -10,7 +10,7 @@ class Localization extends Translations {
           'last_refresh': 'Last refresh',
           'controllers_count': 'Controllers count',
           'charge_level': 'Charge level',
-          'search': 'Search',
+          'search_ip': 'Enter ip address',
         },
         'ru_RU': {
           'controllers': 'Котроллеры',
@@ -18,7 +18,7 @@ class Localization extends Translations {
           'last_refresh': 'Последнее обновление',
           'controllers_count': 'Общее колличество контроллеров',
           'charge_level': 'Уровень заряда',
-          'search': 'Поиск',
+          'search_ip': 'Введите ip адрес',
         }
       };
 }
