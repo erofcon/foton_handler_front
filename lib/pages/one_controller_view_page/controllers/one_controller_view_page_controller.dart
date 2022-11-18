@@ -9,21 +9,27 @@ class OneControllerViewPageController extends GetxController {
 
   final chartData = <GetControllersDataResponse>[].obs;
 
-  final loadData = false.obs;
+  final loadData = true.obs;
 
   @override
   void onInit() {
-    asyncInit();
+    getChartData();
     super.onInit();
   }
 
-  void asyncInit() async {
+  void getChartData({DateTime? startDatetime, DateTime? endDatetime}) async {
+    loadData(true);
     if (Get.arguments != null) {
       GetControllersDataRequest controllersDataRequest =
           GetControllersDataRequest(
-              controllerId: Get.arguments,
-              startDatetime: DateTime.now().toIso8601String(),
-              endDatetime: DateTime.now().toIso8601String());
+        controllerId: Get.arguments['id'],
+        startDatetime: startDatetime == null
+            ? DateTime.now().toIso8601String()
+            : startDatetime.toIso8601String(),
+        endDatetime: endDatetime == null
+            ? DateTime.now().toIso8601String()
+            : endDatetime.toIso8601String(),
+      );
 
       List<GetControllersDataResponse>? response =
           await ApiService().getControllerData(controllersDataRequest);
@@ -32,6 +38,8 @@ class OneControllerViewPageController extends GetxController {
         chartData(response);
       }
     }
+
+    loadData(false);
   }
 
   void setStartTime(DateTime dateTime) {

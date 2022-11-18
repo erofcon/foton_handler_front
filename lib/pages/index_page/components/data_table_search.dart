@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/controllers_tab_controller.dart';
+import '../controllers/index_page_controller.dart';
 
-
-class DataTableSearch extends GetView<ControllersTabController> {
+class DataTableSearch extends GetView<IndexPageController> {
   const DataTableSearch({Key? key}) : super(key: key);
 
   @override

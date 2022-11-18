@@ -7,7 +7,9 @@ import '../../routes/routes.dart';
 import '../../utils/constants.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key);
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +17,17 @@ class LoginPage extends StatelessWidget {
       appBar: const CustomAppBar(),
       body: Center(
         child: Container(
-          margin: const EdgeInsets.only(top: 230.0, left: 50.0, right: 50.0),
-          height: 550.0,
           constraints: const BoxConstraints(maxWidth: 300),
           child: Form(
-            // key: controller.formKey.value,
+            key: formKey,
             child: Column(
-              children: const <Widget>[
-                LoginField(),
-                PasswordField(),
-                KeepUser(),
-                SubmitButton(),
-                Padding(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const LoginField(),
+                const PasswordField(),
+                const KeepUser(),
+                SubmitButton(formKey: formKey),
+                const Padding(
                   padding: EdgeInsets.only(top: UiConstants.defaultPadding),
                 ),
               ],
@@ -46,10 +47,10 @@ class LoginField extends GetView<LoginPageController> {
     return TextFormField(
       keyboardType: TextInputType.name,
       controller: controller.loginEditingController,
-      decoration: const InputDecoration(labelText: "Login"),
+      decoration: InputDecoration(labelText: "login".tr),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return "Please send login";
+          return "login_enter".tr;
         }
         return null;
       },
@@ -66,10 +67,10 @@ class PasswordField extends GetView<LoginPageController> {
       obscureText: true,
       keyboardType: TextInputType.name,
       controller: controller.passwordEditingController,
-      decoration: const InputDecoration(labelText: "Password"),
+      decoration: InputDecoration(labelText: "password".tr),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return "Please send password";
+          return "password_enter".tr;
         }
         return null;
       },
@@ -86,11 +87,16 @@ class KeepUser extends GetView<LoginPageController> {
       padding: const EdgeInsets.only(top: UiConstants.defaultPadding),
       child: Row(
         children: <Widget>[
-          Checkbox(
-            value: false,
-            onChanged: (bool? value) {},
+          Obx(
+            () => Tooltip(
+              message: "tooltip_message".tr,
+              child: Checkbox(
+                value: controller.keepMeStatus.value,
+                onChanged: (bool? value) => controller.keepMeStatus(value),
+              ),
+            ),
           ),
-          const Text('keep me')
+          Text('keep_me'.tr),
         ],
       ),
     );
@@ -98,21 +104,43 @@ class KeepUser extends GetView<LoginPageController> {
 }
 
 class SubmitButton extends GetView<LoginPageController> {
-  const SubmitButton({Key? key}) : super(key: key);
+  const SubmitButton({Key? key, required this.formKey}) : super(key: key);
+
+  final GlobalKey<FormState> formKey;
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () async {
-        if(await controller.login()){
-          Get.toNamed(RoutesClass.home);
-        }
-      },
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(Colors.teal),
-        elevation: MaterialStateProperty.all(10),
-      ),
-      child: const Icon(Icons.arrow_forward),
-    );
+    return Obx(() {
+      if (controller.checkLogin.isTrue) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else {
+        return ElevatedButton.icon(
+          onPressed: () async {
+            if (!formKey.currentState!.validate()) {
+              return;
+            }
+            if (await controller.login()) {
+              Get.toNamed(RoutesClass.home);
+            } else {
+              Get.snackbar("error".tr, "error_login".tr,
+                  margin: EdgeInsets.zero,
+                  duration: const Duration(seconds: 4),
+                  borderRadius: 0,
+                  snackPosition: SnackPosition.BOTTOM,
+                  backgroundColor: Colors.red[300]);
+            }
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+                Theme.of(context).appBarTheme.backgroundColor),
+            elevation: MaterialStateProperty.all(10),
+          ),
+          icon: const Icon(Icons.arrow_forward),
+          label: Text("log_in".tr),
+        );
+      }
+    });
   }
 }

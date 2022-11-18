@@ -45,7 +45,7 @@ class _IconButtonHoverWithEffectState extends State<IconButtonHoverWithEffect> {
         child: Icon(
           widget.icon,
           color: widget.iconColor,
-          size: 20,
+          size: widget.size,
         ),
       ),
     );

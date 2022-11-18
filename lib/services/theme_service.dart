@@ -14,12 +14,12 @@ class ThemeService {
     return isDarkMode() ? ThemeMode.dark : ThemeMode.light;
   }
 
-  void saveThemeMode(bool isDarkMode) {
-    _getStorage.write(_storageKey, isDarkMode);
+  Future<void> saveThemeMode(bool isDarkMode) async {
+    await _getStorage.write(_storageKey, isDarkMode);
   }
 
-  void changeThemeMode() {
-    Get.changeThemeMode(isDarkMode() ? ThemeMode.dark : ThemeMode.light);
-    saveThemeMode(!isDarkMode());
+  void changeThemeMode() async {
+    Get.changeThemeMode(!isDarkMode() ? ThemeMode.dark : ThemeMode.light);
+    await saveThemeMode(!isDarkMode());
   }
 }

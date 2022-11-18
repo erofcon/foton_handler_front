@@ -5,18 +5,18 @@ LoginResponse currentUser(String str) =>
 
 class LoginResponse {
   LoginResponse({
-    required this.accessToken,
-    required this.refreshToken,
-    required this.tokenType,
-    required this.username,
-    required this.isSuperUser,
+    this.accessToken,
+    this.refreshToken,
+    this.tokenType,
+    this.username,
+    this.isSuperUser,
   });
 
-  late final String accessToken;
-  late final String refreshToken;
-  late final String tokenType;
-  late final String username;
-  late final bool isSuperUser;
+  String? accessToken;
+  String? refreshToken;
+  String? tokenType;
+  String? username;
+  bool? isSuperUser;
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
     accessToken = json['access_token'];

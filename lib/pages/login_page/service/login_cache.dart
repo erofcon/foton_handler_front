@@ -14,7 +14,20 @@ mixin LoginCache {
 
   String? getToken() {
     final box = GetStorage();
-    return currentUser(box.read('user')).accessToken;
+    final user = box.read('user');
+    if (user != null) {
+      return currentUser(user).accessToken;
+    }
+    return null;
+  }
+
+  String? getSaveUser() {
+    final box = GetStorage();
+    final user = box.read('user');
+    if (user != null) {
+      return user;
+    }
+    return null;
   }
 
   Map<String, dynamic>? getRefreshToken() {
@@ -26,8 +39,23 @@ mixin LoginCache {
     };
   }
 
-  Future<void> logout() async {
+  Future<void> removeUser() async {
     final box = GetStorage();
     await box.remove('user');
+  }
+
+  Future<void> saveHostAddress(String host) async {
+    final box = GetStorage();
+    await box.remove('host');
+    await box.write('host', host);
+  }
+
+  String? getHostAddress() {
+    final box = GetStorage();
+    final host = box.read('host');
+    if (host != null) {
+      return host;
+    }
+    return null;
   }
 }
