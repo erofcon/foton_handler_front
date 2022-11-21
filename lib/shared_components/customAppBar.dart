@@ -178,7 +178,7 @@ class _AppBarTitle extends StatelessWidget {
     return Container(
         padding: padding,
         child: const Text(
-          "Foton handler",
+          "Foton handler v 0.1b",
           style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
