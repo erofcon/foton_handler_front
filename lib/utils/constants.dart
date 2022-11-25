@@ -13,12 +13,14 @@ class ApiUrl {
   static const String createUser = "/create_user";
   static const String deleteUser = "/delete_user";
   static const String getControllerData = "/get_controller_data";
+  static const String getControllerEditData = "/get_controller_edit_data";
+  static const String updateController = "/update_controller";
 }
 
 class UiConstants {
   static const double defaultPadding = 16;
 }
 
-class Constants{
+class Constants {
   static const int updatePeriodMinute = 5;
 }

@@ -10,7 +10,9 @@ import 'package:get/get.dart';
 import '../models/check_data_collections_status_response.dart';
 import '../models/delete_controller_request.dart';
 import '../models/get_all_controllers_response.dart';
+import '../models/get_controller_to_edit_response.dart';
 import '../models/get_controllers_count_response.dart';
+import '../models/update_controller_request.dart';
 
 class IndexPageController extends GetxController {
   final LoginPageController loginPageController =
@@ -20,13 +22,18 @@ class IndexPageController extends GetxController {
   final controllerAdding = false.obs;
   final controllerDeleting = false.obs;
   final controllersCount = 0.obs;
+  final controllersSearch = false.obs;
+
+  bool controllerEditLoading = false;
 
   List<Map<String, dynamic>> data = [];
   List<Map<String, dynamic>> filterData = [];
 
-  int rowPages = PaginatedDataTable.defaultRowsPerPage;
+  int rowPages = 15;
 
   final TextEditingController searchTextEditingController =
+      TextEditingController();
+  final TextEditingController locationEditingController =
       TextEditingController();
   final TextEditingController ipEditingController = TextEditingController();
   final TextEditingController controllerLoginEditingController =
@@ -41,6 +48,9 @@ class IndexPageController extends GetxController {
 
   late Timer timer;
 
+  int currentSortColumn = 0;
+  bool isAscending = true;
+
   @override
   void onInit() {
     asyncInit();
@@ -54,6 +64,11 @@ class IndexPageController extends GetxController {
   @override
   void onClose() {
     timer.cancel();
+    locationEditingController.dispose();
+    searchTextEditingController.dispose();
+    ipEditingController.dispose();
+    controllerLoginEditingController.dispose();
+    controllerPasswordEditingController.dispose();
     super.onClose();
   }
 
@@ -75,12 +90,14 @@ class IndexPageController extends GetxController {
         (index) => {
           "№": index + 1,
           "id": responseData[index].id,
+          "local_address": responseData[index].localAddress,
           "controller_address": responseData[index].controllerAddress,
           "status": responseData[index].status,
           "charge": responseData[index].charge,
         },
       );
       updateTime = DateTime.now();
+      currentSortColumn = 0;
       update();
     }
   }
@@ -97,6 +114,7 @@ class IndexPageController extends GetxController {
   Future<bool> addController() async {
     controllerAdding(true);
     CreateControllerRequest createControllerRequest = CreateControllerRequest(
+        localAddress: locationEditingController.text,
         controllerAddress: ipEditingController.text,
         login: controllerLoginEditingController.text,
         password: controllerPasswordEditingController.text);
@@ -150,16 +168,79 @@ class IndexPageController extends GetxController {
   void onSearch(String value) {
     filterData.clear();
     if (value != '') {
+      controllersSearch(true);
       filterData = data
           .where((element) => element["controller_address"].contains(value))
           .toList();
+      update();
+    } else {
+      controllersSearch(false);
+      update();
     }
-    update();
   }
 
   void clearTextEditingControllers() {
+    locationEditingController.clear();
     ipEditingController.clear();
     controllerLoginEditingController.clear();
     controllerPasswordEditingController.clear();
+  }
+
+  void sort(int columnIndex, String dataLabelKey) {
+    currentSortColumn = columnIndex;
+    if (isAscending == true) {
+      isAscending = false;
+      data.sort((compareA, compareB) => compareB[dataLabelKey]
+          .toString()
+          .compareTo(compareA[dataLabelKey].toString()));
+    } else {
+      isAscending = true;
+      data.sort((compareA, compareB) => compareA[dataLabelKey]
+          .toString()
+          .compareTo(compareB[dataLabelKey].toString()));
+    }
+
+    update();
+  }
+
+  void controllerEdit(int controllerId) async {
+    controllerEditLoading = true;
+    update();
+    GetControllerToEditResponse? result =
+        await ApiService().getControllerToEditData(controllerId);
+
+    if (result != null) {
+      locationEditingController.text = result.localAddress;
+      ipEditingController.text = result.controllerAddress;
+      controllerLoginEditingController.text = result.login;
+      controllerPasswordEditingController.text = result.password;
+    }
+
+    controllerEditLoading = false;
+    update();
+  }
+
+  Future<void> updateController(int controllerId) async {
+    UpdateControllerRequest updateControllerRequest = UpdateControllerRequest(
+      controllerAddress: ipEditingController.text,
+      localAddress: locationEditingController.text,
+      login: controllerLoginEditingController.text,
+      password: controllerPasswordEditingController.text,
+      id: controllerId,
+    );
+
+    bool result = await ApiService().controllerUpdate(updateControllerRequest);
+
+    if (result) {
+      for (var element in data) {
+        if (element["id"] == controllerId) {
+          element["local_address"] = updateControllerRequest.localAddress;
+          element["controller_address"] =
+              updateControllerRequest.controllerAddress;
+          update();
+          break;
+        }
+      }
+    }
   }
 }

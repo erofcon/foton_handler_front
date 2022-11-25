@@ -9,7 +9,9 @@ import '../pages/index_page/models/check_data_collections_status_response.dart';
 import '../pages/index_page/models/create_controler_request.dart';
 import '../pages/index_page/models/delete_controller_request.dart';
 import '../pages/index_page/models/get_all_controllers_response.dart';
+import '../pages/index_page/models/get_controller_to_edit_response.dart';
 import '../pages/index_page/models/get_controllers_count_response.dart';
+import '../pages/index_page/models/update_controller_request.dart';
 import '../pages/login_page/models/create_user_request.dart';
 import '../pages/login_page/models/get_all_users_response.dart';
 import '../pages/login_page/models/login_request.dart';
@@ -263,6 +265,38 @@ class ApiService with LoginCache {
       }
     } on DioError {
       return null;
+    }
+  }
+
+  Future<GetControllerToEditResponse?> getControllerToEditData(
+      int controllerId) async {
+    try {
+      String baseUrl = getHostAddress() ?? ApiUrl.url;
+      final response = await _api.get(baseUrl + ApiUrl.getControllerEditData,
+          queryParameters: {"controller_id": controllerId});
+      if (response.statusCode == HttpStatus.ok) {
+        return GetControllerToEditResponse.fromJson(response.data);
+      } else {
+        return null;
+      }
+    } on DioError {
+      return null;
+    }
+  }
+
+  Future<bool> controllerUpdate(
+      UpdateControllerRequest updateControllerRequest) async {
+    try {
+      String baseUrl = getHostAddress() ?? ApiUrl.url;
+      final response = await _api.post(baseUrl + ApiUrl.updateController,
+          data: updateControllerRequest.toJson());
+      if (response.statusCode == HttpStatus.ok) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioError {
+      return false;
     }
   }
 }

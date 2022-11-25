@@ -5,11 +5,11 @@ import 'package:get/get.dart';
 
 class OneControllerViewPageController extends GetxController {
   DateTime? startDate;
-  DateTime? endDate;
+  DateTime? endDate = DateTime.now();
 
-  final chartData = <GetControllersDataResponse>[].obs;
+  List<GetControllersDataResponse> chartData = [];
 
-  final loadData = true.obs;
+  bool loadData = true;
 
   @override
   void onInit() {
@@ -17,8 +17,15 @@ class OneControllerViewPageController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    chartData.clear();
+    super.onClose();
+  }
+
   void getChartData({DateTime? startDatetime, DateTime? endDatetime}) async {
-    loadData(true);
+    loadData = true;
+    update();
     if (Get.arguments != null) {
       GetControllersDataRequest controllersDataRequest =
           GetControllersDataRequest(
@@ -35,11 +42,12 @@ class OneControllerViewPageController extends GetxController {
           await ApiService().getControllerData(controllersDataRequest);
 
       if (response != null) {
-        chartData(response);
+        chartData = response;
       }
     }
 
-    loadData(false);
+    loadData = false;
+    update();
   }
 
   void setStartTime(DateTime dateTime) {

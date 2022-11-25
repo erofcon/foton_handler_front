@@ -25,7 +25,6 @@ class LoginPage extends StatelessWidget {
               children: <Widget>[
                 const LoginField(),
                 const PasswordField(),
-                const KeepUser(),
                 SubmitButton(formKey: formKey),
                 const Padding(
                   padding: EdgeInsets.only(top: UiConstants.defaultPadding),
@@ -74,31 +73,6 @@ class PasswordField extends GetView<LoginPageController> {
         }
         return null;
       },
-    );
-  }
-}
-
-class KeepUser extends GetView<LoginPageController> {
-  const KeepUser({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: UiConstants.defaultPadding),
-      child: Row(
-        children: <Widget>[
-          Obx(
-            () => Tooltip(
-              message: "tooltip_message".tr,
-              child: Checkbox(
-                value: controller.keepMeStatus.value,
-                onChanged: (bool? value) => controller.keepMeStatus(value),
-              ),
-            ),
-          ),
-          Text('keep_me'.tr),
-        ],
-      ),
     );
   }
 }

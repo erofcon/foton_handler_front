@@ -1,5 +1,6 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:foton_handler_front/pages/index_page/components/edit_container_dialog.dart';
 import 'package:foton_handler_front/routes/routes.dart';
 import 'package:foton_handler_front/utils/constants.dart';
 import 'package:get/get.dart';
@@ -15,22 +16,41 @@ class ControllersDataTable extends GetView<IndexPageController> {
     return GetBuilder<IndexPageController>(
       builder: (controller) => PaginatedDataTable2(
         source: ControllerDataSource(
-          controller.filterData.isNotEmpty
+          controller.controllersSearch.isTrue
               ? controller.filterData
               : controller.data,
           (controllerId) => controller.deleteController(controllerId),
         ),
         columnSpacing: 12,
         horizontalMargin: 12,
-        rowsPerPage: controller.rowPages,
+        availableRowsPerPage: <int>[
+          controller.rowPages,
+          controller.rowPages * 2,
+          controller.rowPages * 5,
+          controller.rowPages * 10
+        ],
+        rowsPerPage: 15,
         onRowsPerPageChanged: (r) => controller.changeRowPages(r!),
         wrapInCard: false,
         empty: Text("no_data".tr),
+        sortColumnIndex: controller.currentSortColumn,
+        sortAscending: controller.isAscending,
         columns: [
           const DataColumn2(label: Text("№")),
-          DataColumn2(label: Text("controller_address".tr)),
-          DataColumn2(label: Text("status".tr)),
-          DataColumn2(label: Text("charge".tr)),
+          DataColumn2(label: Text("local_address".tr)),
+          DataColumn2(
+            label: Text("controller_address".tr),
+            onSort: (columIndex, _) =>
+                controller.sort(columIndex, "controller_address"),
+          ),
+          DataColumn2(
+            label: Text("status".tr),
+            onSort: (columIndex, _) => controller.sort(columIndex, "status"),
+          ),
+          DataColumn2(
+            label: Text("charge".tr),
+            onSort: (columIndex, _) => controller.sort(columIndex, "charge"),
+          ),
           const DataColumn2(label: Text("")),
         ],
       ),
@@ -56,12 +76,20 @@ class ControllerDataSource extends DataTableSource {
       }),
       cells: [
         DataCell(Text(_data[index]['№'].toString())),
+        DataCell(Text(_data[index]['local_address'] ?? '')),
         DataCell(Text(_data[index]['controller_address'].toString())),
         DataCell(
           _GetStatusChip(status: _data[index]['status']),
         ),
         DataCell(Text("${_data[index]['charge'] ?? '0'}")),
-        DataCell(_DeleteButton(controllerId: _data[index]['id'])),
+        DataCell(
+          Row(
+            children: <Widget>[
+              _DeleteButton(controllerId: _data[index]['id']),
+              _EditButton(controllerId: _data[index]['id']),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -142,25 +170,40 @@ class _DeleteButton extends GetView<IndexPageController> {
           ).then((result) {
             if (result == true) {
               controller.asyncInit();
-              Get.snackbar("success".tr, "success_deleting".tr,
-                  margin: EdgeInsets.zero,
-                  duration: const Duration(seconds: 1),
-                  borderRadius: 0,
-                  snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Colors.green[300]);
-            } else if (result == false) {
-              Get.snackbar("error".tr, "deletion_error".tr,
-                  margin: EdgeInsets.zero,
-                  duration: const Duration(seconds: 1),
-                  borderRadius: 0,
-                  snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Colors.red[300]);
             }
           });
         },
         icon: Icons.delete,
         iconColor: Colors.red[300]!,
         hoverColor: Colors.red[100]!,
+        backgroundColor: Colors.transparent,
+        size: 24,
+      );
+    } else {
+      return Container();
+    }
+  }
+}
+
+class _EditButton extends GetView<IndexPageController> {
+  const _EditButton({Key? key, required this.controllerId}) : super(key: key);
+
+  final int controllerId;
+
+  @override
+  Widget build(BuildContext context) {
+    if (controller.loginPageController.user.value.isSuperUser == true) {
+      return IconButtonHoverWithEffect(
+        onTap: () {
+          controller.controllerEdit(controllerId);
+          Get.dialog(EditContainerDialog(),
+              arguments: {"controllerID": controllerId}).then((value) {
+            controller.clearTextEditingControllers();
+          });
+        },
+        icon: Icons.edit,
+        iconColor: Colors.blue,
+        hoverColor: Colors.blue[100]!,
         backgroundColor: Colors.transparent,
         size: 24,
       );

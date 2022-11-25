@@ -14,6 +14,7 @@ class Localization extends Translations {
           'no_data': 'no data',
           'add': 'add',
           'controller_address': 'controller ip address',
+          'local_address': 'local address',
           'data_collections_status': 'data collections status',
           'pause': 'pause',
           'works': 'works',
@@ -70,18 +71,19 @@ class Localization extends Translations {
           'relay': 'relay',
           'status': 'status',
           // settings alert
-          'host_address':'host address',
+          'host_address': 'host address',
         },
         'ru_RU': {
           //  indexPage
           'controllers': 'Котроллеры',
-          'last_refresh': 'последнне обновление',
+          'last_refresh': 'последнее обновление',
           'count_controllers': 'колличество контроллеров',
           'success_controller_connection': 'соединено',
           'error_controller_connection': 'ошибка',
           'no_data': 'нет данных',
           'add': 'добавить',
-          'controller_address': 'Ip адрес контроллера',
+          'controller_address': 'IP адрес контроллера',
+          'local_address': 'место расположения',
           'data_collections_status': 'состояние сбора данных',
           'pause': 'на паузе',
           'works': 'работает',
@@ -136,7 +138,7 @@ class Localization extends Translations {
           'relay': 'реле',
           'status': 'статус',
           // settings alert
-          'host_address':'адрес хоста',
+          'host_address': 'адрес хоста',
         }
       };
 }

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Foton hundler"
-#define MyAppVersion "0.01b"
+#define MyAppVersion "0.02b"
 #define MyAppPublisher "temirlan.shereuzhev@gmail.com"
 #define MyAppExeName "foton_handler.exe"
 

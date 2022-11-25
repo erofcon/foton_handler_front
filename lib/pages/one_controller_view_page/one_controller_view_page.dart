@@ -33,8 +33,8 @@ class _DataChart extends GetView<OneControllerViewPageController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (controller.loadData.isTrue) {
+    return GetBuilder<OneControllerViewPageController>(builder: (controller) {
+      if (controller.loadData) {
         return const Center(
           child: CircularProgressIndicator(),
         );
@@ -84,7 +84,7 @@ class _DataChart extends GetView<OneControllerViewPageController> {
                 ? numConvert(dataResponse.vin!).toDouble()
                 : 0,
         name: 'vin'.tr,
-        color: const Color.fromRGBO(76, 149, 108, 1),
+        color: Colors.red[300],
         width: 4,
       ),
       LineSeries(
@@ -98,7 +98,7 @@ class _DataChart extends GetView<OneControllerViewPageController> {
                 ? numConvert(dataResponse.vout!).toDouble()
                 : 0,
         name: 'vout'.tr,
-        color: const Color.fromRGBO(136, 150, 150, 1),
+        color: Colors.green[300],
         width: 4,
       ),
       LineSeries(
@@ -122,7 +122,7 @@ class _DataChart extends GetView<OneControllerViewPageController> {
         yValueMapper: (GetControllersDataResponse dataResponse, _) =>
             dataResponse.charge ?? 0,
         name: 'charge'.tr,
-        color: const Color.fromRGBO(158, 197, 171, 1),
+        color: Colors.orange[300],
         width: 4,
       ),
       LineSeries(
@@ -134,19 +134,7 @@ class _DataChart extends GetView<OneControllerViewPageController> {
         yValueMapper: (GetControllersDataResponse dataResponse, _) =>
             dataResponse.relay ?? 0,
         name: 'relay'.tr,
-        color: const Color.fromRGBO(156, 137, 184, 1),
-        width: 4,
-      ),
-      LineSeries(
-        dataSource: controller.chartData,
-        xValueMapper: (GetControllersDataResponse dataResponse, _) =>
-            dataResponse.createDataDateTime != null
-                ? convertDate(dataResponse.createDataDateTime!)
-                : '',
-        yValueMapper: (GetControllersDataResponse dataResponse, _) =>
-            dataResponse.relay ?? 0,
-        name: 'status'.tr,
-        color: const Color.fromRGBO(240, 166, 202, 1),
+        color: Colors.brown,
         width: 4,
       ),
     ];

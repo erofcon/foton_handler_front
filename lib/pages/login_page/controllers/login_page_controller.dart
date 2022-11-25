@@ -31,7 +31,6 @@ class LoginPageController extends GetxController with LoginCache {
   final isSuperUserStatus = false.obs;
   final addUserWidget = false.obs;
   final loadAllUsers = true.obs;
-  final keepMeStatus = true.obs;
   final checkLogin = false.obs;
   String? host;
 

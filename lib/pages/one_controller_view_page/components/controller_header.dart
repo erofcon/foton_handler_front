@@ -37,6 +37,13 @@ class ControllerHeader extends GetView<OneControllerViewPage> {
             spacing: UiConstants.defaultPadding,
             children: [
               OutlinedButton(
+                onPressed: () => controller.getChartData(
+                    startDatetime:
+                        DateTime.now().subtract(const Duration(days: 7)),
+                    endDatetime: DateTime.now()),
+                child: const Text("данные за неделю"),
+              ),
+              OutlinedButton(
                 onPressed: () => controller.getChartData(),
                 child: Text("data_for_today".tr),
               ),

@@ -5,7 +5,6 @@ class GetControllersDataResponse {
     this.temp,
     this.charge,
     this.relay,
-    this.status,
     this.createDataDateTime,
   });
 
@@ -14,7 +13,6 @@ class GetControllersDataResponse {
   int? temp;
   int? charge;
   int? relay;
-  bool? status;
   String? createDataDateTime;
 
   GetControllersDataResponse.fromJson(Map<String, dynamic> json) {
@@ -23,7 +21,6 @@ class GetControllersDataResponse {
     temp = json['temp'];
     charge = json['charge'];
     relay = json['relay'];
-    status = json['status'];
     createDataDateTime = json['create_data_datetime'];
   }
 
@@ -34,7 +31,6 @@ class GetControllersDataResponse {
     data['temp'] = temp;
     data['charge'] = charge;
     data['relay'] = relay;
-    data['status'] = status;
     data['create_data_datetime'] = createDataDateTime;
     return data;
   }
